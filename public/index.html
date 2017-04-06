@@ -9,15 +9,22 @@
   <meta property="og:description" content="Sample application that shows how to use the Conversation API to identify user intents" />
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/app.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
 </head>
 <body>
-  <div id="view-change-button" class="button" onclick="PayloadPanel.togglePanel(event, this)">
-    <img class="option full" src="../img/Chat Button.png">
-    <img class="option not-full" src="../img/Code Button.png">
+
+  <div id="tonDiv">
+    <div id="view-change-button" class="button" onclick="PayloadPanel.togglePanel(event, this)">
+      <img class="option full" src="../img/Chat Button.png">
+      <img class="option not-full" src="../img/Code Button.png">
+    </div>
   </div>
+  <!-- Chat column -->
   <div id="contentParent" class="responsive-columns-wrapper">
     <div id="chat-column-holder" class="responsive-column content-column">
       <div class="chat-column">
+        <div id="date"></div>
         <div id="scrollingChat"></div>
         <label for="textInput" class="inputOutline">
           <input id="textInput" class="input responsive-column"
@@ -26,19 +33,114 @@
         </label>
       </div>
     </div>
-    <div id="payload-column" class="fixed-column content-column">
-      <div id="payload-initial-message">
-        Type something to see the output
+    <!-- Column that displays what watson understands from the user input -->
+      <!-- <div id="tonDiv"> -->  
+      <div id="payload-column" class="fixed-column content-column">
+        <div id="payload-initial-message">
+          Type something to see the output
+        </div>
+        <div id="payload-request" class="payload"></div>
+        <div id="payload-response" class="payload"></div>
       </div>
-      <div id="payload-request" class="payload"></div>
-      <div id="payload-response" class="payload"></div>
-    </div>
+     <!-- </div> --> 
   </div>
 
+  
+  <script src="js/date.js"></script>
   <script src="js/common.js"></script>
   <script src="js/api.js"></script>
   <script src="js/conversation.js"></script>
   <script src="js/payload.js"></script>
   <script src="js/global.js"></script>
+  <script type="text/javascript">
+
+    //pour appeler une fonction dans le workspace conversation :onclick=\"updateMaximo();\" onclick=\"updateMaximo($siteid, $woID, TUR1ST01);\"
+
+     //function updateMaximo(siteid, wonum, jpnum){
+     //  function updateMaximo(){
+
+     //   console.log("je suis dans la fonction updateMaximo");
+     //   var req = new XMLHttpRequest();
+     //   //var params = "{\"SITE\":siteid,\"WONUM\":wonum, \"JPNUM\":jpnum}";
+     //   req.onreadystatechange = function(){
+     //     console.log("je suis dans le request onload");
+     //     if(request.status >= 200 && request.status <400 ){
+     //       console.log("je suis dans le premier if");
+     //       if(request.responseText == 'OK'){
+     //         console.log("success")
+     //       }else{
+     //         console.log("error")
+     //       }
+     //     };
+     //     req.open('PUT','http://192.168.201.4:9081/REACTRESTServices/mxHelper/workOrder/update/jobPlan', true);
+     //     req.send("SITE=WOKING&WONUM=1398&JPNUM=TUR1ST01");
+     //   }
+     // }
+function dataToJSON() {
+    return JSON.stringify({
+        "SITE": "WOKING",
+        "WONUM": "1398",
+        "JPNUM": "TUR1ST01",
+        });
+}
+
+// function createCORSRequest(method, url) {
+//   var xhr = new XMLHttpRequest();
+//   if ("withCredentials" in xhr) {
+
+//     // Check if the XMLHttpRequest object has a "withCredentials" property.
+//     // "withCredentials" only exists on XMLHTTPRequest2 objects.
+//     xhr.open(method, url, true);
+
+//   } else if (typeof XDomainRequest != "undefined") {
+
+//     // Otherwise, check if XDomainRequest.
+//     // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+//     xhr = new XDomainRequest();
+//     xhr.open(method, url);
+
+//   } else {
+
+//     // Otherwise, CORS is not supported by the browser.
+//     xhr = null;
+
+//   }
+//   return xhr;
+// }
+
+// var xhr = createCORSRequest('GET', url);
+// if (!xhr) {
+//   throw new Error('CORS not supported');
+// }
+
+function updateMaximo() {
+  console.log('updateMaximo');
+  var content = new Object();
+    content.SITE = "WOKING";
+    content.WONUM = "1409";
+    content.JPNUM = "TUR1ST01";
+
+    var jsonContent = JSON.stringify(content);
+    
+   $.ajax({
+     type: 'PUT',
+     contentType: 'application/json',
+     dataType: 'json',
+     crossDomain: true,
+     url:'http://cap-sg-prd-1.integration.ibmcloud.com:15954/REACTRESTServices/mxHelper/workOrder/update/jobPlan' ,
+     data: jsonContent,
+     headers: {
+     'X-Custom-Header': '*'
+     },
+     success: function(data, textStatus, jqXHR){
+       alert('Maximo updated successfully');
+     },
+     error: function(jqXHR, textStatus, errorThrown){
+       alert('updateMaximo error: ' + textStatus);
+     }
+   });
+}
+
+  </script>
 </body>
 </html>

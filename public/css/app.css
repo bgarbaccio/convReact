@@ -15,6 +15,25 @@ div {
   line-height: 1.25rem;
 }
 
+button {
+  -webkit-border-radius: 24;
+  -moz-border-radius: 24;
+  border-radius: 24px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 12px;
+  background: #9855d4;
+  padding: 4px 8px 4px 8px;
+  text-decoration: none;
+  border-width: 0px ! important; 
+}
+
+
+button:hover {
+  background: #c299e6;
+  text-decoration: none;
+}
+
 #view-change-button {
   display: inline-block;
   position: absolute;
@@ -45,6 +64,8 @@ div {
 
 #contentParent {
   height: 100%;
+  background: #f8f8f8 url("../img/marketo-form-watson-logo.png") no-repeat 100% 100%;
+  background-size: 70%;
 }
 
 .responsive-columns-wrapper {
@@ -69,18 +90,18 @@ div {
 
 .chat-column {
   height: 100%;
-  padding: 0.9375rem 0 0.625rem 0;
+  padding: 0rem 0 0.625rem 0;
   margin: auto;
   text-align: left;
-  max-width: 25rem;
+  max-width: 30rem;
   min-width: 9.375rem;
 }
 
 #scrollingChat {
-  margin: 0.75rem;
+  margin: 0.25rem;
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100% - 4rem);
+  height: calc(100% - 5rem);
 }
 
 .message-inner {
@@ -123,14 +144,32 @@ div {
   border-bottom-right-radius: 0;
   text-align: left;
   display: inline-block;
-  margin-left: 2.5rem;
-  min-width: 2.5rem;
+  /*margin-left: 0.3125rem;*/
+  margin-right: 0.3125em;
+  min-width: 0.3125rem;
 }
 
 .from-user .message-inner p {
   margin: 0.3125rem;
-  padding: 0 0.9375rem;
+  padding: 0 0.3125rem;
 }
+
+
+/*.from-user.top p:before {
+  content: "";
+  color: #9855D4;
+  background-image: url("../img/engineer.png");
+  background-size: 2.7rem 2.7rem;
+  position: absolute;
+  z-index: 2;
+  left: 0.5rem
+  width: 2.7rem;
+  height: 2.7rem;
+  line-height: 1.3125rem;
+  margin-left: 15px;
+  margin-right: 5px;
+  text-align: left;
+}*/
 
 .from-user .message-inner:before, .from-user .message-inner:after {
   content: "";
@@ -158,12 +197,14 @@ div {
 }
 
 .from-watson .message-inner {
+  
   position: relative;
   border-radius: 1.5625rem;
   font-size: 1rem;
   color: #B5B5B5;
   letter-spacing: 0.015rem;
   line-height: 1.3125rem;
+
 }
 
 .from-watson.latest .message-inner {
@@ -171,21 +212,25 @@ div {
 }
 
 .from-watson p {
-  margin: 0.3125rem;
-  padding: 0 1.25rem;
+  margin-top: 1rem;
+  margin-left: 1.6rem;
+  padding: 1.6 1.25rem;
 }
 
-.from-watson.latest.top p:before {
-  content: ".";
+
+
+.from-watson.top p:before {
+  content: " ";
   color: #9855D4;
-  background-image: url("../img/marker_image.png");
-  background-size: 0.3125rem 1.3125rem;
+  background-image: url("../img/innovation.png");
+  background-size: 2.7rem 2.7rem;
   position: absolute;
   z-index: 2;
-  left: 0.4375rem;
-  width: 0.3125rem;
-  height: 1.3125rem;
+  left: -0.1rem;
+  width: 2.7rem;
+  height: 2.7rem;
   line-height: 1.3125rem;
+  margin-left: 0.2rem;
 }
 
 #textInput {
@@ -321,10 +366,6 @@ html{
     font-size: 14px;
   }
 
-  .chat-column {
-    padding-top: 4rem;
-  }
-
   #payload-column {
     width: 0;
     max-width: none;
@@ -428,4 +469,17 @@ html{
   url('../fonts/ibm-glyphs.svg?1b8643#ibm-glyph') format('svg');
   font-weight: normal;
   font-style: normal;
+}
+
+#tonDiv{
+display:none;
+background:gold;
+}
+
+#date{
+  padding-top: 1rem;
+  text-align: center;
+  color: #b3b3b3;
+  font-style: italic;
+  font-size: x-small; 
 }

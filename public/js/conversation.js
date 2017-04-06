@@ -2,6 +2,20 @@
 // all display and behaviors of the conversation column of the app.
 /* eslint no-unused-vars: "off" */
 /* global Api: true, Common: true*/
+function itsmecha() {
+  var latestResponse = Api.getResponsePayload();
+  console.log("latestResponse")
+  console.log(latestResponse)
+  var context = latestResponse.context;
+  Api.sendRequest("mechanical", context);
+}
+
+function itselec() {
+  var latestResponse = Api.getResponsePayload();
+  var context = latestResponse.context;
+  Api.sendRequest("electrical", context);
+}
+
 
 var ConversationPanel = (function() {
   var settings = {
@@ -26,7 +40,7 @@ var ConversationPanel = (function() {
   // Initialize the module
   function init() {
     chatUpdateSetup();
-    Api.sendRequest( '', null );
+    Api.sendRequest('', null);
     setupInputBox();
   }
   // Set up callbacks on payload setters in Api module
@@ -45,7 +59,7 @@ var ConversationPanel = (function() {
     };
   }
 
-// Set up the input box to underline text as it is typed
+  // Set up the input box to underline text as it is typed
   // This is done by creating a hidden dummy version of the input box that
   // is used to determine what the width of the input text should be.
   // This value is then used to set the new width of the visible input box.
@@ -83,22 +97,23 @@ var ConversationPanel = (function() {
         input.classList.add('underline');
         var txtNode = document.createTextNode(input.value);
         ['font-size', 'font-style', 'font-weight', 'font-family', 'line-height',
-          'text-transform', 'letter-spacing'].forEach(function(index) {
-            dummy.style[index] = window.getComputedStyle(input, null).getPropertyValue(index);
-          });
+          'text-transform', 'letter-spacing'
+        ].forEach(function(index) {
+          dummy.style[index] = window.getComputedStyle(input, null).getPropertyValue(index);
+        });
         dummy.textContent = txtNode.textContent;
 
         var padding = 0;
         var htmlElem = document.getElementsByTagName('html')[0];
         var currentFontSize = parseInt(window.getComputedStyle(htmlElem, null).getPropertyValue('font-size'), 10);
         if (currentFontSize) {
-          padding = Math.floor((currentFontSize - minFontSize) / (maxFontSize - minFontSize)
-            * (maxPadding - minPadding) + minPadding);
+          padding = Math.floor((currentFontSize - minFontSize) / (maxFontSize - minFontSize) *
+            (maxPadding - minPadding) + minPadding);
         } else {
           padding = maxPadding;
         }
 
-        var widthValue = ( dummy.offsetWidth + padding) + 'px';
+        var widthValue = (dummy.offsetWidth + padding) + 'px';
         input.setAttribute('style', 'width:' + widthValue);
         input.style.width = widthValue;
       }
@@ -112,32 +127,54 @@ var ConversationPanel = (function() {
     Common.fireEvent(input, 'input');
   }
 
+  function displayGif() {
+      document.getElementsByTagName("p").innerHTML = "<img src='../img/ibm-watson.gif'>"
+
+  }
   // Display a user or Watson message that has just been sent/received
   function displayMessage(newPayload, typeValue) {
     var isUser = isUserMessage(typeValue);
-    var textExists = (newPayload.input && newPayload.input.text)
-      || (newPayload.output && newPayload.output.text);
+    console.log('isUser')
+    console.log(isUser)
+
+    var textExists = (newPayload.input && newPayload.input.text) ||
+      (newPayload.output && newPayload.output.text);
     if (isUser !== null && textExists) {
       // Create new message DOM element
       var messageDivs = buildMessageDomElements(newPayload, isUser);
+      console.log("messageDivs")
+      console.log(messageDivs)
       var chatBoxElement = document.querySelector(settings.selectors.chatBox);
-      var previousLatest = chatBoxElement.querySelectorAll((isUser
-              ? settings.selectors.fromUser : settings.selectors.fromWatson)
-              + settings.selectors.latest);
+      var previousLatest = chatBoxElement.querySelectorAll((isUser ?
+          settings.selectors.fromUser : settings.selectors.fromWatson) +
+        settings.selectors.latest);
       // Previous "latest" message is no longer the most recent
       if (previousLatest) {
         Common.listForEach(previousLatest, function(element) {
           element.classList.remove('latest');
         });
       }
-
       messageDivs.forEach(function(currentDiv) {
-        chatBoxElement.appendChild(currentDiv);
-        // Class to start fade in animation
-        currentDiv.classList.add('load');
+        if (newPayload.context.wait == "true" && !isUser) {
+          displayGif()
+          setTimeout(function() {
+            //hideGif()
+            chatBoxElement.appendChild(currentDiv);
+            currentDiv.classList.add('load');
+          }, 1000)
+
+        } else {
+          chatBoxElement.appendChild(currentDiv);
+          currentDiv.classList.add('load');
+        }
       });
       // Move chat to the most recent messages when new messages are added
       scrollToChatBottom();
+      var input = document.getElementById('textInput');
+      if (newPayload.context && newPayload.context.conversationEnd == "true") {
+        input.disabled = 'disabled';
+        input.value = ' ';
+      }
     }
   }
 
@@ -156,9 +193,10 @@ var ConversationPanel = (function() {
   // Constructs new DOM element from a message payload
   function buildMessageDomElements(newPayload, isUser) {
     var textArray = isUser ? newPayload.input.text : newPayload.output.text;
-    if (Object.prototype.toString.call( textArray ) !== '[object Array]') {
+    if (Object.prototype.toString.call(textArray) !== '[object Array]') {
       textArray = [textArray];
     }
+
     var messageArray = [];
 
     textArray.forEach(function(currentText) {
@@ -179,6 +217,7 @@ var ConversationPanel = (function() {
                 // <p>{messageText}</p>
                 'tagName': 'p',
                 'text': currentText
+
               }]
             }]
           }]
@@ -186,7 +225,6 @@ var ConversationPanel = (function() {
         messageArray.push(Common.buildDomElement(messageJson));
       }
     });
-
     return messageArray;
   }
 
@@ -199,8 +237,8 @@ var ConversationPanel = (function() {
     var scrollingChat = document.querySelector('#scrollingChat');
 
     // Scroll to the latest message sent by the user
-    var scrollEl = scrollingChat.querySelector(settings.selectors.fromUser
-            + settings.selectors.latest);
+    var scrollEl = scrollingChat.querySelector(settings.selectors.fromUser +
+      settings.selectors.latest);
     if (scrollEl) {
       scrollingChat.scrollTop = scrollEl.offsetTop;
     }
