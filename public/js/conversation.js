@@ -192,13 +192,13 @@ var ConversationPanel = (function() {
 
   // Constructs new DOM element from a message payload
   function buildMessageDomElements(newPayload, isUser) {
+    //if message comes from user, it's an input, if it comes from watson it's an output
     var textArray = isUser ? newPayload.input.text : newPayload.output.text;
     if (Object.prototype.toString.call(textArray) !== '[object Array]') {
       textArray = [textArray];
     }
 
     var messageArray = [];
-
     textArray.forEach(function(currentText) {
       if (currentText) {
         var messageJson = {

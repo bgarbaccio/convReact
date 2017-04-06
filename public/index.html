@@ -121,17 +121,9 @@ function updateMaximo() {
     content.JPNUM = "TUR1ST01";
 
     var jsonContent = JSON.stringify(content);
-    
-   $.ajax({
-     type: 'PUT',
-     contentType: 'application/json',
-     dataType: 'json',
-     crossDomain: true,
-     url:'http://cap-sg-prd-1.integration.ibmcloud.com:15954/REACTRESTServices/mxHelper/workOrder/update/jobPlan' ,
-     data: jsonContent,
-     headers: {
-     'X-Custom-Header': '*'
-     },
+       $.ajax({
+     type: 'GET',
+     url:'http://cap-sg-prd-1.integration.ibmcloud.com:15954/REACTRESTServices/mxHelper/workOrder/updateByGet/jobPlan?SITE=WOKING&WONUM=1409&JPNUM=TUR1ST02' ,
      success: function(data, textStatus, jqXHR){
        alert('Maximo updated successfully');
      },
@@ -139,6 +131,24 @@ function updateMaximo() {
        alert('updateMaximo error: ' + textStatus);
      }
    });
+
+   // $.ajax({
+   //   type: 'PUT',
+   //   contentType: 'application/json',
+   //   dataType: 'json',
+   //   crossDomain: true,
+   //   url:'http://cap-sg-prd-1.integration.ibmcloud.com:15954/REACTRESTServices/mxHelper/workOrder/update/jobPlan' ,
+   //   data: jsonContent,
+   //   headers: {
+   //   'X-Custom-Header': '*'
+   //   },
+   //   success: function(data, textStatus, jqXHR){
+   //     alert('Maximo updated successfully');
+   //   },
+   //   error: function(jqXHR, textStatus, errorThrown){
+   //     alert('updateMaximo error: ' + textStatus);
+   //   }
+   // });
 }
 
   </script>
