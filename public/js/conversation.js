@@ -2,6 +2,7 @@
 // all display and behaviors of the conversation column of the app.
 /* eslint no-unused-vars: "off" */
 /* global Api: true, Common: true*/
+
 function itsmecha() {
   var latestResponse = Api.getResponsePayload();
   console.log("latestResponse")
@@ -14,6 +15,37 @@ function itselec() {
   var latestResponse = Api.getResponsePayload();
   var context = latestResponse.context;
   Api.sendRequest("electrical", context);
+}
+
+function updateMaximo(clicked_id) {
+  console.log('updateMaximo');
+  var jobplan = clicked_id;
+  console.log('jobplan', jobplan);
+  var siteid = Api.getResponsePayload().context.siteid;
+  var woid = Api.getResponsePayload().context.woID;
+  $.get('/updateJP', {myjpnum:jobplan, site:siteid, wonum:woid}, function(req, res) {
+    if(req.output.text == "OK"){
+      document.getElementById("modal-body").innerHTML = "Update succeeded - You can now go back to Maximo.";
+    }else{
+      document.getElementById("modal-body").innerHTML = "Update failed - Another job plan might already be assigned to this Work Order.";
+    }
+    modal=document.getElementById("myModal");
+    modal.style.display = "block";
+  })
+  }
+
+// When the user clicks on <span> (x), close the modal
+var span = document.getElementsByClassName("close")[0];
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+var modal = document.getElementById('myModal');
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
 }
 
 
@@ -126,11 +158,8 @@ var ConversationPanel = (function() {
     // Trigger the input event once to set up the input box and dummy element
     Common.fireEvent(input, 'input');
   }
+  var promise = require('promise');
 
-  function displayGif() {
-      document.getElementsByTagName("p").innerHTML = "<img src='../img/ibm-watson.gif'>"
-
-  }
   // Display a user or Watson message that has just been sent/received
   function displayMessage(newPayload, typeValue) {
     var isUser = isUserMessage(typeValue);
@@ -142,8 +171,6 @@ var ConversationPanel = (function() {
     if (isUser !== null && textExists) {
       // Create new message DOM element
       var messageDivs = buildMessageDomElements(newPayload, isUser);
-      console.log("messageDivs")
-      console.log(messageDivs)
       var chatBoxElement = document.querySelector(settings.selectors.chatBox);
       var previousLatest = chatBoxElement.querySelectorAll((isUser ?
           settings.selectors.fromUser : settings.selectors.fromWatson) +
@@ -156,16 +183,34 @@ var ConversationPanel = (function() {
       }
       messageDivs.forEach(function(currentDiv) {
         if (newPayload.context.wait == "true" && !isUser) {
-          displayGif()
-          setTimeout(function() {
-            //hideGif()
+          console.log("message envoyé par watson + wait = true")
+          //appeler fonction avec promise
+          watsonDelay().then(function(){
+            console.log("promise succeeded")
             chatBoxElement.appendChild(currentDiv);
+            console.log("currentDiv", currentDiv);
             currentDiv.classList.add('load');
-          }, 1000)
+            scrollToChatBottom();
+            //currentDiv.classList.add('typewriter');
+              // $("#type-it").typeIt({
+              //   strings: [newPayload.output.text]
+              // });
+            });
+         }else if(!isUser){
+           console.log("message envoyé par watson")
+           chatBoxElement.appendChild(currentDiv);
+           console.log("currentDiv", currentDiv);
+           currentDiv.classList.add('load');
+           currentDiv.classList.add('typewriter');
 
-        } else {
+              $("#type-it").typeIt({
+                strings: [newPayload.output.text]
+              });
+           scrollToChatBottom();
+        }else{
           chatBoxElement.appendChild(currentDiv);
           currentDiv.classList.add('load');
+          scrollToChatBottom();
         }
       });
       // Move chat to the most recent messages when new messages are added
@@ -173,10 +218,23 @@ var ConversationPanel = (function() {
       var input = document.getElementById('textInput');
       if (newPayload.context && newPayload.context.conversationEnd == "true") {
         input.disabled = 'disabled';
-        input.value = ' ';
+        input.value = '';
       }
     }
   }
+
+  function watsonDelay(){
+     
+    return new Promise(function (resolve, reject) {
+      $('div#scrollingChat').append('<div class ="myclass"><img height="60" src="./img/ibmwatsons.gif"> Watson is thinking</div>')
+        setTimeout(function() {
+          console.log("image hidden")
+          resolve($('.myclass').hide())
+        }, 4000)
+      })
+  }
+
+
 
   // Checks if the given typeValue matches with the user "name", the Watson "name", or neither
   // Returns true if user, false if Watson, and null if neither
@@ -199,32 +257,87 @@ var ConversationPanel = (function() {
     }
 
     var messageArray = [];
-    textArray.forEach(function(currentText) {
-      if (currentText) {
-        var messageJson = {
-          // <div class='segments'>
-          'tagName': 'div',
-          'classNames': ['segments'],
-          'children': [{
-            // <div class='from-user/from-watson latest'>
-            'tagName': 'div',
-            'classNames': [(isUser ? 'from-user' : 'from-watson'), 'latest', ((messageArray.length === 0) ? 'top' : 'sub')],
-            'children': [{
-              // <div class='message-inner'>
-              'tagName': 'div',
-              'classNames': ['message-inner'],
-              'children': [{
-                // <p>{messageText}</p>
-                'tagName': 'p',
-                'text': currentText
+      // if(isUser){
+      //   textArray.forEach(function(currentText) {
+      //   if (currentText) {
+      //     var messageJson = {
+      //       // <div class='segments'>
+      //       'tagName': 'div',
+      //       'classNames': ['segments'],
+      //       'children': [{
+      //         // <div class='from-user/from-watson latest'>
+      //         'tagName': 'div',
+      //         'classNames': [(isUser ? 'from-user' : 'from-watson'), 'latest', ((messageArray.length === 0) ? 'top' : 'sub')],
+      //         'children': [{
+      //           // <div class='message-inner'>
+      //           'tagName': 'div',
+      //           'classNames': ['message-inner'],
+      //           'children': [{
+      //             // <p>{messageText}</p>
+      //             'tagName': 'p',
+      //             'text': currentText
 
-              }]
-            }]
-          }]
-        };
-        messageArray.push(Common.buildDomElement(messageJson));
-      }
-    });
+      //           }]
+      //         }]
+      //       }]
+      //     };
+      //     messageArray.push(Common.buildDomElement(messageJson));
+      //   }
+      // });}else{
+      //   textArray.forEach(function(currentText) {
+      //   if (currentText) {
+      //     var messageJson = {
+      //       // <div class='segments'>
+      //       'tagName': 'div',
+      //       'classNames': ['segments'],
+      //       'children': [{
+      //         // <div class='from-user/from-watson latest'>
+      //         'tagName': 'div',
+      //         'classNames': [(isUser ? 'from-user' : 'from-watson'), 'latest', ((messageArray.length === 0) ? 'top' : 'sub')],
+      //         'children': [{
+      //           // <div class='message-inner'>
+      //           'tagName': 'div',
+      //           'classNames': ['message-inner']
+      //           'children' :[{
+      //             'tagName': 'span',
+      //             //'text':currentText,
+      //             'attributes': [{
+      //               'name': 'id',
+      //               'value': 'type-it'
+      //             }]
+      //           }]
+      //         }]
+      //       }]
+      //     };
+      //     messageArray.push(Common.buildDomElement(messageJson));
+      //   }
+      // });
+      // }
+       textArray.forEach(function(currentText) {
+         if (currentText) {
+           var messageJson = {
+             // <div class='segments'>
+             'tagName': 'div',
+             'classNames': ['segments'],
+             'children': [{
+               // <div class='from-user/from-watson latest'>
+               'tagName': 'div',
+               'classNames': [(isUser ? 'from-user' : 'from-watson'), 'latest', ((messageArray.length === 0) ? 'top' : 'sub')],
+               'children': [{
+                 // <div class='message-inner'>
+                 'tagName': 'div',
+                 'classNames': ['message-inner'],
+                 'children': [{
+                   // <p>{messageText}</p>
+                   'tagName': 'p',
+                   'text': currentText
+                 }]
+               }]
+             }]
+           };
+           messageArray.push(Common.buildDomElement(messageJson));
+         }
+       });
     return messageArray;
   }
 

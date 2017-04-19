@@ -19,7 +19,7 @@
 var express = require('express'); // app server
 var bodyParser = require('body-parser'); // parser for post requests
 var Conversation = require('watson-developer-cloud/conversation/v1'); // watson sdk
-
+var request = require('request');
 var app = express();
 
 // Bootstrap application settings
@@ -37,7 +37,37 @@ var conversation = new Conversation({
   version: 'v1'
 });
 
+app.get('/updateJP', function(req, res) {
+  var myjpnum = req.query.myjpnum 
+  var site = req.query.site
+  var wonum = req.query.wonum
+  request('http://92.103.147.95/REACTRESTServices/mxHelper/workOrder/updateByGet/jobPlan?SITE=' + site +'&WONUM=' + wonum + '&JPNUM=' +myjpnum, function (error, response, body) {
+  console.log('error:', error); // Print the error if one occurred 
+  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
+  console.log('body:', body); // Print the body of the response. 
+  if(body == '{"RESULT":"OK"}'){
+    return res.json({
+      'output': {
+        'text': 'OK'
+      }
+    });
+  }else{
+    return res.json({
+      'output': {
+        'text': 'KO'
+      }
+    });
+  }
+})
+})
 
+app.get('/pbDefcallback', function(req,res){
+  var targeturl = req.query.targeturl
+  request('targeturl')
+  console.log('error:', error); // Print the error if one occurred 
+  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
+  console.log('body:', body); // Print the HTML for the Google homepage. 
+})
 
 // Endpoint to be call from the client side
 app.post('/api/message', function(req, res) {

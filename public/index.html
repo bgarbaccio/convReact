@@ -1,16 +1,16 @@
 <html>
 <head>
   <base href="/">
-  <title>Conversation Chat App</title>
+  <title>Watson assistant</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta property="og:image" content="conversation.svg" />
-  <meta property="og:title" content="Conversation Chat Simple" />
-  <meta property="og:description" content="Sample application that shows how to use the Conversation API to identify user intents" />
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <meta property="og:image" content="engineer.png" />
+  <meta property="og:title" content="Watson assistant" />
+  <meta property="og:description" content="Watson assistant is here to help you with your maintenance issues" />
+  <link rel="shortcut icon" href="engineer.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/app.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-
+  
 </head>
 <body>
 
@@ -24,8 +24,28 @@
   <div id="contentParent" class="responsive-columns-wrapper">
     <div id="chat-column-holder" class="responsive-column content-column">
       <div class="chat-column">
-        <div id="date"></div>
+        <div class='row'>
+          <div class="col-4">
+            <a id="top" class='button'  style='vertical-align:middle' href="javascript:window.location.reload()"><span>Restart</span></a>
+          </div>
+          <div class="col-4">
+            <div id="date"></div>
+          </div>
+          <div class="col-4">
+            <a href="http://92.103.147.95/maximo/" id ="top" class ="button" style='vertical-align:middle'><span>Back to Maximo</span></a>
+          </div>
+        </div>
         <div id="scrollingChat"></div>
+        <div id="myModal" class="modal">
+          <!-- Modal content -->
+          <div class="modal-content">
+            <div class="modal-header">
+              <span class="close">&times;</span>
+              <p><img height="30" src="../img/engineer.png"> Watson Assistant</p>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+          </div>
+        </div>
         <label for="textInput" class="inputOutline">
           <input id="textInput" class="input responsive-column"
             placeholder="Type something" type="text"
@@ -34,7 +54,7 @@
       </div>
     </div>
     <!-- Column that displays what watson understands from the user input -->
-      <!-- <div id="tonDiv"> -->  
+      <div id="tonDiv"> 
       <div id="payload-column" class="fixed-column content-column">
         <div id="payload-initial-message">
           Type something to see the output
@@ -42,10 +62,11 @@
         <div id="payload-request" class="payload"></div>
         <div id="payload-response" class="payload"></div>
       </div>
-     <!-- </div> --> 
+     </div>
   </div>
 
-  
+  <script src="jquery.typeit/typeit.js"></script>
+  <script src="jquery.typeit/typeit.min.js"></script>
   <script src="js/date.js"></script>
   <script src="js/common.js"></script>
   <script src="js/api.js"></script>
@@ -56,81 +77,6 @@
 
     //pour appeler une fonction dans le workspace conversation :onclick=\"updateMaximo();\" onclick=\"updateMaximo($siteid, $woID, TUR1ST01);\"
 
-     //function updateMaximo(siteid, wonum, jpnum){
-     //  function updateMaximo(){
-
-     //   console.log("je suis dans la fonction updateMaximo");
-     //   var req = new XMLHttpRequest();
-     //   //var params = "{\"SITE\":siteid,\"WONUM\":wonum, \"JPNUM\":jpnum}";
-     //   req.onreadystatechange = function(){
-     //     console.log("je suis dans le request onload");
-     //     if(request.status >= 200 && request.status <400 ){
-     //       console.log("je suis dans le premier if");
-     //       if(request.responseText == 'OK'){
-     //         console.log("success")
-     //       }else{
-     //         console.log("error")
-     //       }
-     //     };
-     //     req.open('PUT','http://192.168.201.4:9081/REACTRESTServices/mxHelper/workOrder/update/jobPlan', true);
-     //     req.send("SITE=WOKING&WONUM=1398&JPNUM=TUR1ST01");
-     //   }
-     // }
-function dataToJSON() {
-    return JSON.stringify({
-        "SITE": "WOKING",
-        "WONUM": "1398",
-        "JPNUM": "TUR1ST01",
-        });
-}
-
-// function createCORSRequest(method, url) {
-//   var xhr = new XMLHttpRequest();
-//   if ("withCredentials" in xhr) {
-
-//     // Check if the XMLHttpRequest object has a "withCredentials" property.
-//     // "withCredentials" only exists on XMLHTTPRequest2 objects.
-//     xhr.open(method, url, true);
-
-//   } else if (typeof XDomainRequest != "undefined") {
-
-//     // Otherwise, check if XDomainRequest.
-//     // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-//     xhr = new XDomainRequest();
-//     xhr.open(method, url);
-
-//   } else {
-
-//     // Otherwise, CORS is not supported by the browser.
-//     xhr = null;
-
-//   }
-//   return xhr;
-// }
-
-// var xhr = createCORSRequest('GET', url);
-// if (!xhr) {
-//   throw new Error('CORS not supported');
-// }
-
-function updateMaximo() {
-  console.log('updateMaximo');
-  var content = new Object();
-    content.SITE = "WOKING";
-    content.WONUM = "1409";
-    content.JPNUM = "TUR1ST01";
-
-    var jsonContent = JSON.stringify(content);
-       $.ajax({
-     type: 'GET',
-     url:'http://cap-sg-prd-1.integration.ibmcloud.com:15954/REACTRESTServices/mxHelper/workOrder/updateByGet/jobPlan?SITE=WOKING&WONUM=1409&JPNUM=TUR1ST02' ,
-     success: function(data, textStatus, jqXHR){
-       alert('Maximo updated successfully');
-     },
-     error: function(jqXHR, textStatus, errorThrown){
-       alert('updateMaximo error: ' + textStatus);
-     }
-   });
 
    // $.ajax({
    //   type: 'PUT',
@@ -149,7 +95,6 @@ function updateMaximo() {
    //     alert('updateMaximo error: ' + textStatus);
    //   }
    // });
-}
 
   </script>
 </body>

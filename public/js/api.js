@@ -26,8 +26,6 @@ var Api = (function() {
   };
 
 
-
-
  // gets the params in the URL
  function urlParam(name) {
   var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href)
@@ -53,22 +51,18 @@ function probDefinitionCBprob(targetURLprob) {
 
   // intialize a query selector to simplify the requests
   return new Promise(function (resolve, reject) {
-
     $.getJSON(targetURLprob).done(function(data) {
-
+      //$.get('/pbDefcallback', { targeturl:targetURLprob }, function(req,res){
+      //  console.log("req: " + req + "\nres: " + res)
+      //}).done(function(data) {
       var querySelector = data.QueryMXWOResponse.MXWOSet.WORKORDER[0].Attributes
-      console.log("querySelector");
-      console.log(querySelector)
-
       // assign values to previously initialize variables
       // this should be done by checking particular fields in the workorder
       // parsing the strings is just a workaround and shouldn't be used in production
       var desc = querySelector.DESCRIPTION.content.toLowerCase()
-      console.log("desc")
-      console.log(desc)
       resolve(desc);
     })
-  })  
+  } ) 
 }
 
 // //function used to process the JSON file of the page "targetURL"
@@ -139,8 +133,8 @@ function probDefinition(){
 
     //var targetURLprob ='http://cap-sg-prd-1.integration.ibmcloud.com:15308/maxrest/rest/os/MXWO?WONUM=' + woID + '&location=' + farmID + '&_lid=windadmin&_lpwd=windadmin&_format=json&callback=?'
     var targetURLjobplan= 'http://cap-sg-prd-1.integration.ibmcloud.com:15308/maxrest/rest/os/jobplan?SITEID='+ siteID +'&_lid=windadmin&_lpwd=windadmin&_format=json&callback=?'
-    var targetURLprob ='http://cap-sg-prd-1.integration.ibmcloud.com:15954/maxrest/rest/os/MXWO?WONUM=' + woID + '&location=' + farmID + '&_lid=windadmin&_lpwd=windadmin&_format=json&callback=?'
-    //var targetURLprob ='http://92.103.147.95/maxrest/rest/os/MXWO?WONUM=' + woID + '&location=' + farmID + '&_lid=windadmin&_lpwd=windadmin&_format=json&callback=?'
+    //var targetURLprob ='http://cap-sg-prd-1.integration.ibmcloud.com:15954/maxrest/rest/os/MXWO?WONUM=' + woID + '&location=' + farmID + '&_lid=windadmin&_lpwd=windadmin&_format=json&callback=?'
+    var targetURLprob ='http://92.103.147.95/maxrest/rest/os/MXWO?WONUM=' + woID + '&location=' + farmID + '&_lid=windadmin&_lpwd=windadmin&_format=json&callback=?'
     
   return new Promise(function (resolve, reject) {
     //the promise contained in probDefinitionCB is resolved when the information is 

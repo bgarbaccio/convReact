@@ -16,23 +16,65 @@ div {
 }
 
 button {
-  -webkit-border-radius: 24;
-  -moz-border-radius: 24;
-  border-radius: 24px;
+  -webkit-border-radius: 4;
+  -moz-border-radius: 4;
+  border-radius: 1.25rem;
   font-family: Arial;
-  color: #ffffff;
-  font-size: 12px;
+  color: #ffffff !important;
+  font-size: 1rem;
+  /*background: #a27dd3;*/
   background: #9855d4;
-  padding: 4px 8px 4px 8px;
+  padding: 0.5rem 0.6rem;
   text-decoration: none;
   border-width: 0px ! important; 
+  cursor: pointer;
+  margin: 0.55rem !important;
 }
 
-
-button:hover {
-  background: #c299e6;
-  text-decoration: none;
+a{
+  color:#9855d4;
 }
+
+.button {
+  display: inline-block;
+  border-radius: 4px;
+  color: #9855d4 !important;
+  border: none;
+  background-color: #FFFFFF;
+  text-align: center;
+  font-size: 12px ;
+  padding: 10px !important;
+  width: 80px !important;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 3px !important;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
 
 #view-change-button {
   display: inline-block;
@@ -64,7 +106,7 @@ button:hover {
 
 #contentParent {
   height: 100%;
-  background: #f8f8f8 url("../img/marketo-form-watson-logo.png") no-repeat 100% 100%;
+  background: #f2f2f2 url("../img/marketo-form-watson-logo.png") no-repeat 100% 100%;
   background-size: 70%;
 }
 
@@ -93,7 +135,7 @@ button:hover {
   padding: 0rem 0 0.625rem 0;
   margin: auto;
   text-align: left;
-  max-width: 30rem;
+  max-width: 55rem;
   min-width: 9.375rem;
 }
 
@@ -101,7 +143,7 @@ button:hover {
   margin: 0.25rem;
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100% - 5rem);
+  height: calc(100% - 9rem);
 }
 
 .message-inner {
@@ -131,12 +173,14 @@ button:hover {
 
 .from-user {
   text-align: right;
+  margin-right: 2.2em;
 }
 
 .from-user .message-inner {
   position: relative;
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: #fff;
+  padding: 0.35rem;
   letter-spacing: 0.015rem;
   line-height: 1.3125rem;
   background: #00B4A0;
@@ -144,7 +188,6 @@ button:hover {
   border-bottom-right-radius: 0;
   text-align: left;
   display: inline-block;
-  /*margin-left: 0.3125rem;*/
   margin-right: 0.3125em;
   min-width: 0.3125rem;
 }
@@ -200,10 +243,10 @@ button:hover {
   
   position: relative;
   border-radius: 1.5625rem;
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: #B5B5B5;
-  letter-spacing: 0.015rem;
-  line-height: 1.3125rem;
+  letter-spacing: 0.025rem;
+  line-height: 1.8125rem;
 
 }
 
@@ -212,9 +255,9 @@ button:hover {
 }
 
 .from-watson p {
-  margin-top: 1rem;
+  margin-top: 1.3rem;
   margin-left: 1.6rem;
-  padding: 1.6 1.25rem;
+  padding: 1.20rem 1.55rem;
 }
 
 
@@ -223,12 +266,12 @@ button:hover {
   content: " ";
   color: #9855D4;
   background-image: url("../img/innovation.png");
-  background-size: 2.7rem 2.7rem;
+  background-size: 2.9rem 2.9rem;
   position: absolute;
   z-index: 2;
   left: -0.1rem;
-  width: 2.7rem;
-  height: 2.7rem;
+  width: 2.9rem;
+  height: 2.9rem;
   line-height: 1.3125rem;
   margin-left: 0.2rem;
 }
@@ -243,7 +286,7 @@ button:hover {
   line-height: 1.3125rem;
   height: 2.5rem;
   max-width: 100%;
-  padding-left: 0.125rem;
+  padding-left: 0rem;
   margin-bottom: -0.125rem;
   font-family: Helvetica Neue for IBM, Helvetica Neue, Helvetica, Arial, sans-serif;
 
@@ -298,9 +341,8 @@ input:-moz-placeholder {
   background-color: #23292A;
   color: #fff;
   overflow-x: auto;
-
   width: 45%;
-  max-width: 32.0625rem;
+  max-width: 31.0125rem;
   min-width: 29.6875rem;
 }
 
@@ -478,8 +520,142 @@ background:gold;
 
 #date{
   padding-top: 1rem;
-  text-align: center;
   color: #b3b3b3;
   font-style: italic;
-  font-size: x-small; 
+  font-size: 0.9rem; 
+}
+
+#top{
+color: #b3b3b3 !important;
+background-color: #f2f2f2 !important;
+font-size: 0.9rem !important;
+}
+
+.myclass{
+  font-style: italic;
+  font-size: 1.2rem;
+  color: #b1afb6;
+}
+
+.typewriter {
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  /*border-right: .05em solid black;*/ /* The typwriter cursor */
+  white-space: nowrap;  /*Keeps the content on a single line*/ 
+  display:block;
+  /*margin: 0 auto;*/ /* Gives that scrolling effect as the typing happens */
+  letter-spacing: .15em; /* Adjust as needed */
+  animation: 
+    typing 3.5s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: black; }
+}
+
+[class*="col-"] {
+    float: left;
+    padding: 15px;
+}
+
+.row::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+/*responsive css grid*/
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 15rem; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 50%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+    color: black;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+  padding: 0.8rem 1.2rem;
+  background-color: rgba(243, 234, 251, 0.2);
+  color: #b3b3b3;
+  font-style: italic;
+
+    /*color: white;*/
+}
+
+.modal-body {
+  padding: 0.8rem 1.2rem;
+}
+
+.modal-footer {
+  padding: 0.8rem 1.2rem;
+  background-color: #5cb85c;
+  color: white;
 }
